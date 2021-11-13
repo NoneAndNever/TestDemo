@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Collection
   layers:
   - Default
   - TransparentFX
@@ -41,12 +42,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
+  - name: Sky
+    uniqueID: 3755289709
+    locked: 0
+  - name: GroundWall
     uniqueID: 1391573287
     locked: 0
-  - name: Front
+  - name: Player
     uniqueID: 3092752347
     locked: 0
-  - name: TopPlants
+  - name: Collections
+    uniqueID: 1062887173
+    locked: 0
+  - name: Covers
     uniqueID: 4120345011
     locked: 0

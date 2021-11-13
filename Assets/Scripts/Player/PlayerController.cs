@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public Collider2D col;
     public LayerMask Ground;
     public float speed, jumpForce;
-
+    public int cherries = 0;
     
 
     // Start is called before the first frame update
@@ -83,6 +83,15 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("Falling", false);
             anim.SetBool("Idle", true);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Collection")
+        {
+            Destroy(collision.gameObject);
+            cherries++;
         }
     }
 
