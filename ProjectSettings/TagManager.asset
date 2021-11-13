@@ -12,7 +12,7 @@ TagManager:
   - 
   - Water
   - UI
-  - Ground
+  - Sky
   - 
   - 
   - 
@@ -47,6 +47,9 @@ TagManager:
     locked: 0
   - name: GroundWall
     uniqueID: 1391573287
+    locked: 0
+  - name: Envrionment
+    uniqueID: 1770969115
     locked: 0
   - name: Player
     uniqueID: 3092752347
