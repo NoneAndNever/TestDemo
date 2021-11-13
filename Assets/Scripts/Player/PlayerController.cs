@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class PlayerController : MonoBehaviour
     public Collider2D col;
     public LayerMask Ground;
     public float speed, jumpForce;
-
+    public int cherries = 0;
+    public Text CherryNum;
     
 
     // Start is called before the first frame update
@@ -25,9 +27,6 @@ public class PlayerController : MonoBehaviour
         Jump();
         SwitchAnim();
     }
-
-
-
 
     void Jump()
     {
@@ -67,8 +66,6 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(faceDirection,1,1);
         }
     }
-
-
     void SwitchAnim()
     {
         if (anim.GetBool("Jumping"))
@@ -83,6 +80,16 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("Falling", false);
             anim.SetBool("Idle", true);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Collection")
+        {
+            Destroy(collision.gameObject);
+            cherries++;
+            CherryNum.text = cherries.ToString();
         }
     }
 
