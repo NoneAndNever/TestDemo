@@ -5,14 +5,16 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private Animator anim;
+
     public Collider2D col;
     public LayerMask Ground;
-    public float speed, jumpForce;
-    public int cherries = 0,gems=0;
     public Text CherryNum, GemNum;
-    
+
+    private Rigidbody2D rb;
+    private Animator anim;
+    private float speed = 320, jumpForce = 640;
+    private int cherries = 0, gems = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,10 @@ public class PlayerController : MonoBehaviour
         SwitchAnim();
     }
 
+
+    //跳跃
+    //将Jumping置为true
+    //将Falling，Idle置为false
     void Jump()
     {
         if (Input.GetButtonDown("Jump"))
@@ -48,6 +54,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
+
+    //水平移动
+    //读取horizontal按键
+    //控制Running真假
+    //根据运动方向控制任务朝向
     void GroundMovement()
     {
         float horizontalMove = Input.GetAxis("Horizontal");
@@ -66,6 +77,10 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(faceDirection,1,1);
         }
     }
+
+
+    //跳跃动画
+    //根据Jumping，Falling，Idle调整动画
     void SwitchAnim()
     {
         if (anim.GetBool("Jumping"))
@@ -83,6 +98,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
+    //收集樱桃钻石
+    //读取碰撞体tag信息增加收集品计数
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Cherry")
