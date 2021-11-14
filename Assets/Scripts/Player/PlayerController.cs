@@ -10,8 +10,8 @@ public class PlayerController : MonoBehaviour
     public Collider2D col;
     public LayerMask Ground;
     public float speed, jumpForce;
-    public int cherries = 0;
-    public Text CherryNum;
+    public int cherries = 0,gems=0;
+    public Text CherryNum, GemNum;
     
 
     // Start is called before the first frame update
@@ -85,11 +85,18 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Collection")
+        if (collision.tag == "Cherry")
         {
             Destroy(collision.gameObject);
             cherries++;
             CherryNum.text = cherries.ToString();
+        }
+
+        if (collision.tag == "Gem")
+        {
+            Destroy(collision.gameObject);
+            gems++;
+            GemNum.text = gems.ToString();
         }
     }
 
