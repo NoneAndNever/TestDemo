@@ -2,27 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Frog : MonoBehaviour
+public class Frog : Enemies
 {
     public Transform Lpoint, Rpoint;
     public LayerMask Ground;
-    private Rigidbody2D rb;
-    private Collider2D col;
-    private Animator anim;
     private float Lx, Rx;
     private bool FaceLeft;
     private float speed = 5.0f, jumpForce = 10.0f;
 
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        col = GetComponent<Collider2D>();
-        anim = GetComponent<Animator>();
+        base.Start();
         Lx = Lpoint.position.x;
         Rx = Rpoint.position.x;
-        transform.DetachChildren();
         Destroy(Lpoint.gameObject);
         Destroy(Rpoint.gameObject);
         FaceLeft = true;
@@ -34,7 +28,7 @@ public class Frog : MonoBehaviour
         SwitchAnim();
     }
 
-
+    //在限定区域内移动
     void Movement()
     {
         if (FaceLeft)
@@ -65,6 +59,8 @@ public class Frog : MonoBehaviour
         }
     }
 
+
+    //循环切换动画
     void SwitchAnim()
     {
         if (anim.GetBool("Jumping"))

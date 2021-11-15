@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private float speed = 320, jumpForce = 640;
     private int cherries = 0, gems = 0;
     private bool isHurting,isCrouching,isGround;
+    private int jumpTimes = 2;
 
 
     // Start is called before the first frame update
@@ -40,11 +41,16 @@ public class PlayerController : MonoBehaviour
     //将Falling置为false
     void Jump()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && jumpTimes > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.fixedDeltaTime);
             anim.SetBool("Jumping", true);
             anim.SetBool("Falling", false);
+            jumpTimes--;
+        }
+        if (Vcol.IsTouchingLayers(Ground)&& (!anim.GetBool("Jumping")) && (!anim.GetBool("Falling")))
+        {
+            jumpTimes = 2;
         }
     }
 
@@ -158,14 +164,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    //消灭敌人or受到伤害
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Enermies")
         {
-            if (Physics2D.OverlapBox(Feetcheck.position, new Vector2(0.2f, 0.6f), 90f, Enemies))
+            Enemies enemy = collision.gameObject.GetComponent<Enemies>();
+            if (Physics2D.OverlapBox(Feetcheck.position, new Vector2(0.4f, 0.6f), 90f, Enemies))
             {
-                Destroy(collision.gameObject);
+                enemy.JumpOn();
             }
             else
             {
