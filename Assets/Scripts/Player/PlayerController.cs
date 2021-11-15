@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
 
-    public Collider2D col;
+    public Collider2D Vcol, Hcol;
     public LayerMask Ground;
     public Text CherryNum, GemNum;
+    public Transform Cellingcheck;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Jump();
+        Crouch();
         SwitchAnim();
     }
 
@@ -38,7 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump"))
         {
-            rb.velocity = new Vector2 (rb.velocity.x, jumpForce * Time.fixedDeltaTime);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.fixedDeltaTime);
             anim.SetBool("Jumping", true);
             anim.SetBool("Falling", false);
             anim.SetBool("Idle", false);
@@ -59,22 +61,23 @@ public class PlayerController : MonoBehaviour
     //读取horizontal按键
     //控制Running真假
     //根据运动方向控制任务朝向
+    //若无水平方向输入则自动减速
     void GroundMovement()
     {
         float horizontalMove = Input.GetAxis("Horizontal");
         float faceDirection = Input.GetAxisRaw("Horizontal");
-
-        
 
         if (horizontalMove != 0)
         {
             rb.velocity = new Vector2(horizontalMove * speed * Time.fixedDeltaTime, rb.velocity.y);
             anim.SetFloat("Running", Mathf.Abs(faceDirection));
         }
+        else
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0, 0.5f), rb.velocity.y);
 
         if (faceDirection != 0)
         {
-            transform.localScale = new Vector3(faceDirection,1,1);
+            transform.localScale = new Vector3(faceDirection, 1, 1);
         }
     }
 
@@ -85,13 +88,13 @@ public class PlayerController : MonoBehaviour
     {
         if (anim.GetBool("Jumping"))
         {
-            if(rb.velocity.y < 0)
+            if (rb.velocity.y < 0)
             {
                 anim.SetBool("Jumping", false);
                 anim.SetBool("Falling", true);
             }
         }
-        else if (col.IsTouchingLayers(Ground))
+        else if (Vcol.IsTouchingLayers(Ground))
         {
             anim.SetBool("Falling", false);
             anim.SetBool("Idle", true);
@@ -119,4 +122,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+
+    //
+    void Crouch()
+    {
+        
+        if (Input.GetButton("Crouch"))
+        {
+            anim.SetBool("Crouching", true);
+            Vcol.enabled = false;
+            Hcol.enabled = true;
+        }
+        else if (!Physics2D.OverlapBox(Cellingcheck.position, new Vector2(0.2f, 0.4f), 90f, Ground))
+        {
+
+            anim.SetBool("Crouching", false);
+            Vcol.enabled = true;
+            Hcol.enabled = false;
+        }
+    }
 }
