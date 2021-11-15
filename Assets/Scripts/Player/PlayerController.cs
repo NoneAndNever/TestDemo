@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask Ground,Enemies;
     public Text CherryNum, GemNum;
     public Transform CellingCheck,FeetCheck;
-    public AudioSource jumpAudio;
+    public AudioSource jumpAudio,cherryAudio,gemAudio;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -158,6 +158,7 @@ public class PlayerController : MonoBehaviour
         if (collision.tag == "Cherry")
         {
             Destroy(collision.gameObject);
+            cherryAudio.Play();
             cherries++;
             CherryNum.text = cherries.ToString();
         }
@@ -165,6 +166,7 @@ public class PlayerController : MonoBehaviour
         if (collision.tag == "Gem")
         {
             Destroy(collision.gameObject);
+            gemAudio.Play();
             gems++;
             GemNum.text = gems.ToString();
         }
