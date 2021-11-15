@@ -173,6 +173,7 @@ public class PlayerController : MonoBehaviour
             if (Physics2D.OverlapBox(Feetcheck.position, new Vector2(0.4f, 0.6f), 90f, Enemies))
             {
                 enemy.JumpOn();
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.fixedDeltaTime);
             }
             else
             {

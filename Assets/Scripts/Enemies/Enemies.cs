@@ -7,6 +7,7 @@ public class Enemies : MonoBehaviour
     protected Animator anim;
     protected Collider2D col;
     protected Rigidbody2D rb;
+    protected AudioSource deathAudio;
     
     // Start is called before the first frame update
     protected virtual void Start()
@@ -14,6 +15,7 @@ public class Enemies : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         anim = GetComponent<Animator>();
+        deathAudio = GetComponent<AudioSource>();
     }
 
     public void Death()
@@ -23,6 +25,7 @@ public class Enemies : MonoBehaviour
 
     public void JumpOn()
     {
+        deathAudio.Play();
         anim.SetTrigger("Death");
     }
 }
