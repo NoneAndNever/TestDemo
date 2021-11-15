@@ -103,10 +103,14 @@ MonoBehaviour:
   Hcol: {fileID: 7197788488322215229}
   Ground:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
+  Enemies:
+    serializedVersion: 2
+    m_Bits: 256
   CherryNum: {fileID: 0}
   GemNum: {fileID: 0}
   Cellingcheck: {fileID: 0}
+  Feetcheck: {fileID: 0}
 --- !u!50 &4489967074616301028
 Rigidbody2D:
   serializedVersion: 4

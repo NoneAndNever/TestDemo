@@ -7,14 +7,15 @@ public class PlayerController : MonoBehaviour
 {
 
     public Collider2D Vcol, Hcol;
-    public LayerMask Ground;
+    public LayerMask Ground,Enemies;
     public Text CherryNum, GemNum;
-    public Transform Cellingcheck;
+    public Transform Cellingcheck,Feetcheck;
 
     private Rigidbody2D rb;
     private Animator anim;
     private float speed = 320, jumpForce = 640;
     private int cherries = 0, gems = 0;
+    private bool isHurting,isCrouching,isGround;
 
 
     // Start is called before the first frame update
@@ -27,7 +28,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Jump();
+        if(!isCrouching)
+            Jump();
         Crouch();
         SwitchAnim();
     }
@@ -35,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     //跳跃
     //将Jumping置为true
-    //将Falling，Idle置为false
+    //将Falling置为false
     void Jump()
     {
         if (Input.GetButtonDown("Jump"))
@@ -43,47 +45,38 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.fixedDeltaTime);
             anim.SetBool("Jumping", true);
             anim.SetBool("Falling", false);
-            anim.SetBool("Idle", false);
         }
     }
 
 
-
-    void FixedUpdate()
+    //蹲下
+    //按住蹲下松开战立
+    //当头顶有物块松开按键保持蹲下，直到头顶无障碍
+    void Crouch()
     {
-        GroundMovement();
 
-    }
-
-
-
-    //水平移动
-    //读取horizontal按键
-    //控制Running真假
-    //根据运动方向控制任务朝向
-    //若无水平方向输入则自动减速
-    void GroundMovement()
-    {
-        float horizontalMove = Input.GetAxis("Horizontal");
-        float faceDirection = Input.GetAxisRaw("Horizontal");
-
-        if (horizontalMove != 0)
+        if (Input.GetButton("Crouch"))
         {
-            rb.velocity = new Vector2(horizontalMove * speed * Time.fixedDeltaTime, rb.velocity.y);
-            anim.SetFloat("Running", Mathf.Abs(faceDirection));
+            anim.SetBool("Crouching", true);
+            Vcol.enabled = false;
+            Hcol.enabled = true;
+            isCrouching = true;
         }
-        else
-            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0, 0.5f), rb.velocity.y);
-
-        if (faceDirection != 0)
+        else if (!Physics2D.OverlapBox(Cellingcheck.position, new Vector2(0.2f, 0.4f), 90f, Ground))
         {
-            transform.localScale = new Vector3(faceDirection, 1, 1);
+
+            anim.SetBool("Crouching", false);
+            Vcol.enabled = true;
+            Hcol.enabled = false;
+            isCrouching = false;
         }
     }
 
 
-    //跳跃动画
-    //根据Jumping，Falling，Idle调整动画
+
+
+    //切换动画
+    //根据Jumping，Falling调整动画
     void SwitchAnim()
     {
         if (anim.GetBool("Jumping"))
@@ -97,11 +90,54 @@ public class PlayerController : MonoBehaviour
         else if (Vcol.IsTouchingLayers(Ground))
         {
             anim.SetBool("Falling", false);
-            anim.SetBool("Idle", true);
+            isGround = true;
+        }
+        if(rb.velocity.y < -2f )
+        {
+            anim.SetBool("Jumping", false);
+            anim.SetBool("Falling", true);
         }
     }
 
 
+    void FixedUpdate()
+    {
+        if (!isHurting)
+        {
+            GroundMovement();
+        }
+    }
+
+
+
+
+
+
+    //水平移动
+    //读取horizontal按键
+    //控制Running真假
+    //根据运动方向控制任务朝向
+    void GroundMovement()
+    {
+        float horizontalMove = Input.GetAxis("Horizontal");
+        float faceDirection = Input.GetAxisRaw("Horizontal");
+
+        if (horizontalMove != 0)
+        {
+            rb.velocity = new Vector2(horizontalMove * speed * Time.fixedDeltaTime, rb.velocity.y);
+            anim.SetFloat("Running", Mathf.Abs(faceDirection));
+        }
+        else
+        {
+            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0, 0.5f), rb.velocity.y);
+        }
+
+        if (faceDirection != 0)
+        {
+            transform.localScale = new Vector3(faceDirection, 1, 1);
+        }
+
+    }
 
     //收集樱桃钻石
     //读取碰撞体tag信息增加收集品计数
@@ -123,23 +159,20 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
-    //
-    void Crouch()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        
-        if (Input.GetButton("Crouch"))
+        if (collision.gameObject.tag == "Enermies")
         {
-            anim.SetBool("Crouching", true);
-            Vcol.enabled = false;
-            Hcol.enabled = true;
-        }
-        else if (!Physics2D.OverlapBox(Cellingcheck.position, new Vector2(0.2f, 0.4f), 90f, Ground))
-        {
-
-            anim.SetBool("Crouching", false);
-            Vcol.enabled = true;
-            Hcol.enabled = false;
+            if (Physics2D.OverlapBox(Feetcheck.position, new Vector2(0.2f, 0.6f), 90f, Enemies))
+            {
+                Destroy(collision.gameObject);
+            }
+            else
+            {
+                anim.SetBool("Hurting", true);
+                isHurting = true;
+                rb.velocity = new Vector2(-10f * transform.localScale.x , rb.velocity.y);
+            }
         }
     }
 }
