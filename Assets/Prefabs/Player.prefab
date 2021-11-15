@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 4489967074616301034}
   - component: {fileID: 4489967074616301028}
   - component: {fileID: 4489967074616301025}
+  - component: {fileID: 515170317521701771}
+  - component: {fileID: 7197788488322215229}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -97,12 +99,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 530618c485f03884c99109260379fa5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  col: {fileID: 0}
+  Vcol: {fileID: 515170317521701771}
+  Hcol: {fileID: 7197788488322215229}
   Ground:
     serializedVersion: 2
     m_Bits: 64
   CherryNum: {fileID: 0}
   GemNum: {fileID: 0}
+  Cellingcheck: {fileID: 0}
 --- !u!50 &4489967074616301028
 Rigidbody2D:
   serializedVersion: 4
@@ -143,3 +147,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!70 &515170317521701771
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4489967074616301035}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 85c71bffcb1b28e42bc8f47e23b544b2, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.028286964, y: -0.33055723}
+  m_Size: {x: 0.9525294, y: 1.3277991}
+  m_Direction: 0
+--- !u!70 &7197788488322215229
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4489967074616301035}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 85c71bffcb1b28e42bc8f47e23b544b2, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.13070959, y: -0.570412}
+  m_Size: {x: 1.1391628, y: 0.8487704}
+  m_Direction: 1
