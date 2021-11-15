@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
     public Collider2D Vcol, Hcol;
     public LayerMask Ground,Enemies;
     public Text CherryNum, GemNum;
-    public Transform Cellingcheck,Feetcheck;
+    public Transform CellingCheck,FeetCheck;
+    public AudioSource jumpAudio;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && jumpTimes > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.fixedDeltaTime);
+            jumpAudio.Play();
             anim.SetBool("Jumping", true);
             anim.SetBool("Falling", false);
             jumpTimes--;
@@ -68,7 +70,7 @@ public class PlayerController : MonoBehaviour
             Hcol.enabled = true;
             isCrouching = true;
         }
-        else if (!Physics2D.OverlapBox(Cellingcheck.position, new Vector2(0.2f, 0.4f), 90f, Ground))
+        else if (!Physics2D.OverlapBox(CellingCheck.position, new Vector2(0.2f, 0.4f), 90f, Ground))
         {
 
             anim.SetBool("Crouching", false);
@@ -111,6 +113,10 @@ public class PlayerController : MonoBehaviour
         if (!isHurting)
         {
             GroundMovement();
+        }
+        else
+        {
+            StopHurting();
         }
     }
 
@@ -170,7 +176,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Enermies")
         {
             Enemies enemy = collision.gameObject.GetComponent<Enemies>();
-            if (Physics2D.OverlapBox(Feetcheck.position, new Vector2(0.4f, 0.6f), 90f, Enemies))
+            if (Physics2D.OverlapBox(FeetCheck.position, new Vector2(0.4f, 0.6f), 90f, Enemies))
             {
                 enemy.JumpOn();
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.fixedDeltaTime);
@@ -179,8 +185,19 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetBool("Hurting", true);
                 isHurting = true;
-                rb.velocity = new Vector2(-10f * transform.localScale.x , rb.velocity.y);
+                rb.velocity = new Vector2(5.0f, jumpForce * Time.fixedDeltaTime);
             }
+        }
+    }
+
+
+    // ‹…À÷Õø’
+    void StopHurting()
+    {
+        if (Vcol.IsTouchingLayers(Ground))
+        {
+            anim.SetBool("Hurting", false);
+            isHurting = false;
         }
     }
 }
