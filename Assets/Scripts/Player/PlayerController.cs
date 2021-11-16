@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -153,6 +154,8 @@ public class PlayerController : MonoBehaviour
 
     //收集樱桃钻石
     //读取碰撞体tag信息增加收集品计数
+    //读取死亡线
+    //读取房门切换场景
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Cherry")
@@ -170,6 +173,13 @@ public class PlayerController : MonoBehaviour
             gems++;
             GemNum.text = gems.ToString();
         }
+
+        if (collision.tag == "Deadline")
+        {
+            GetComponent<AudioSource>().enabled = false;
+            Invoke("ReStart", 1.0f);
+        }
+
     }
 
     //消灭敌人or受到伤害
@@ -202,4 +212,13 @@ public class PlayerController : MonoBehaviour
             isHurting = false;
         }
     }
+
+
+    //死亡
+    void ReStart()
+    {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+
 }
