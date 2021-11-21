@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class GameSaveManager : MonoBehaviour
 {
-    public SaveList saveData;
+    public SaveList saveList;
     public void SaveGame()
     {
         if (!Directory.Exists(Application.persistentDataPath + "/gameData_save"))
@@ -18,7 +18,7 @@ public class GameSaveManager : MonoBehaviour
         FileStream file = File.Create(Application.persistentDataPath + "/ gameData_save/save.txt");
         BinaryWriter bw = new BinaryWriter(file);
 
-        var json =JsonUtility.ToJson(saveData);
+        var json =JsonUtility.ToJson(saveList);
 
         bf.Serialize(file,json);
         file.Close();
@@ -31,7 +31,7 @@ public class GameSaveManager : MonoBehaviour
         if(File.Exists(Application.persistentDataPath + "/ gameData_save/save.txt"))
         {
             FileStream file = File.Open(Application.persistentDataPath + "/ gameData_save/save.txt",FileMode.Open);
-            JsonUtility.FromJsonOverwrite((string)bf.Deserialize(file) , saveData);
+            JsonUtility.FromJsonOverwrite((string)bf.Deserialize(file) , saveList);
             file.Close();
         }
     }
