@@ -6,19 +6,28 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public PlayerController player;
     public Collider2D Vcol, Hcol;
     public LayerMask Ground,Enemies;
     public Text CherryNum, GemNum;
     public Transform CellingCheck,FeetCheck;
+
     //public AudioSource jumpAudio,cherryAudio,gemAudio;
+    [Header("Dash参数")]
+    private float dashTime=0.2f;//冲刺时长
+    private float dashTimeLeft;//剩余冲刺时间
+    private float lastDash=-10f;//上次冲刺时间
+    private float dashCoolDown=3f;//冲刺CD
+    private float dashSpeed=30;//冲刺速度
+
+    
 
     private Rigidbody2D rb;
     private Animator anim;
     private float speed = 320, jumpForce = 640;
     private int cherries = 0, gems = 0;
-    private bool isHurting,isCrouching,isGround;
-    private int jumpTimes = 2;
+    private bool isHurting,isCrouching,isGround,isDashing;
+    private int jumpTimes = 2,jumpSkill=2;
 
 
     // Start is called before the first frame update
@@ -28,16 +37,69 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
+    private void Awake()
+    {
+        player = this;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if(!isCrouching)
+        Dash();
+        if (!isCrouching && !isHurting)
             Jump();
         Crouch();
         SwitchAnim();
         isGround = Physics2D.OverlapCircle(FeetCheck.position, 0.2f, Ground);
+
+        ReadyToDash();
+
+        glide();
+
     }
 
+
+    void glide()
+    {
+        if (Input.GetButton("Glide") && rb.velocity.y < 0)
+        {
+            rb.gravityScale = 0.2f;
+        }
+        else
+        {
+            rb.gravityScale = 1f;
+        }
+    }
+
+    void ReadyToDash()
+    {
+        if (Input.GetKeyDown(KeyCode.C) && Time.time > lastDash + dashCoolDown)
+        {
+            isDashing = true;
+            dashTimeLeft = dashTime;
+            lastDash = Time.time;
+        }
+    }
+
+    void Dash()
+    {
+        if (isDashing )
+        {
+            if (dashTimeLeft > 0)
+            {
+                if (!isHurting)
+                {
+                    rb.velocity = new Vector2(dashSpeed * transform.localScale.x, rb.velocity.y);
+                }
+                dashTimeLeft -= Time.deltaTime;
+                ShadowPool.instance.GetFromPool();
+            }
+            else
+            {
+                isDashing=false;
+            }
+        }
+    }
 
     //跳跃
     //将Jumping置为true
@@ -54,7 +116,7 @@ public class PlayerController : MonoBehaviour
         }
         if (isGround && (!anim.GetBool("Jumping")) && (!anim.GetBool("Falling")))
         {
-            jumpTimes = 2;
+            jumpTimes = jumpSkill;
         }
     }
 
@@ -81,8 +143,6 @@ public class PlayerController : MonoBehaviour
             isCrouching = false;
         }
     }
-
-
 
 
     //切换动画
@@ -112,18 +172,17 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDashing)
+            return;
         if (!isHurting)
         {
             GroundMovement();
         }
         else
         {
-            StopHurting();
+            Invoke("StopHurting", 0.2f);
         }
     }
-
-
-
 
 
 
@@ -193,12 +252,20 @@ public class PlayerController : MonoBehaviour
             {
                 enemy.JumpOn();
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce * Time.fixedDeltaTime);
+                jumpTimes=jumpSkill-1;
             }
             else
             {
                 anim.SetBool("Hurting", true);
                 isHurting = true;
-                rb.velocity = new Vector2(5.0f, jumpForce * Time.fixedDeltaTime);
+                if (rb.position.x < collision.transform.position.x)
+                {
+                    rb.velocity = new Vector2(-5.0f, jumpForce * Time.fixedDeltaTime);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(5.0f, jumpForce * Time.fixedDeltaTime);
+                }
             }
         }
     }
@@ -220,6 +287,7 @@ public class PlayerController : MonoBehaviour
     {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
 
 
 }

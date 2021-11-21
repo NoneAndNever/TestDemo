@@ -7,8 +7,8 @@ public class Frog : Enemies
     public Transform Lpoint, Rpoint;
     public LayerMask Ground;
     private float Lx, Rx;
-    private bool FaceLeft;
     private float speed = 5.0f, jumpForce = 10.0f;
+    private int moveDirection = -1;
 
 
     // Start is called before the first frame update
@@ -19,7 +19,7 @@ public class Frog : Enemies
         Rx = Rpoint.position.x;
         Destroy(Lpoint.gameObject);
         Destroy(Rpoint.gameObject);
-        FaceLeft = true;
+        
     }
 
     // Update is called once per frame
@@ -31,31 +31,21 @@ public class Frog : Enemies
     //在限定区域内移动
     void Movement()
     {
-        if (FaceLeft)
+        if (transform.position.x < Lx)
         {
-            if (col.IsTouchingLayers(Ground))
-            {
-                rb.velocity = new Vector2(-speed, jumpForce);
-                anim.SetBool("Jumping", true);
-            }
-            if(transform.position.x < Lx)
-            {
-                transform.localScale = new Vector3(-1,1,1);
-                FaceLeft = false;
-            }
+            transform.localScale = new Vector3(-1, 1, 1);
+            moveDirection = 1;
+
         }
-        else
+        if (transform.position.x > Rx)
         {
-            if (col.IsTouchingLayers(Ground))
-            {
-                rb.velocity = new Vector2(speed, jumpForce);
-                anim.SetBool("Jumping", true);
-            }
-            if (transform.position.x > Rx)
-            {
-                transform.localScale = new Vector3(1, 1, 1);
-                FaceLeft = true;
-            }
+            transform.localScale = new Vector3(1, 1, 1);
+            moveDirection = -1;
+        }
+        if (col.IsTouchingLayers(Ground))
+        {
+            rb.velocity = new Vector2(speed * moveDirection, jumpForce);
+            anim.SetBool("Jumping", true);
         }
     }
 

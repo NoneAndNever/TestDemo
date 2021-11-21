@@ -12,16 +12,28 @@ public class Pause : MonoBehaviour
     {
         PauseMenu.SetActive(true);
         Time.timeScale = 0f;
+        AudioMixer.SetFloat("Pitch", 0f);
     }
 
     public void ResumeGame()
     {
         PauseMenu.SetActive(false);
         Time.timeScale = 1.0f;
+        AudioMixer.SetFloat("Pitch", 1f);
     }
 
-    public void SetVolume(float value)
+    public void SetMainVolume(float value)
     {
         AudioMixer.SetFloat("MainVolume",value);
+    }
+
+    public void SetMusicVolume(float value)
+    {
+        AudioMixer.SetFloat("Music", value);
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        AudioMixer.SetFloat("SFX", value);
     }
 }

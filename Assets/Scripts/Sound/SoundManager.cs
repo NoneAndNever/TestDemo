@@ -6,9 +6,10 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Sound;
 
-    public AudioSource audioSource;
-    [SerializeField]
-    private AudioClip jumpAudio, cherryAudio, gemAudio;
+
+
+    [SerializeField] private AudioSource MusicAudioSource, SFXAudioSource;
+    [SerializeField] private AudioClip jumpAudio, cherryAudio, gemAudio;
     void Awake()
     {
         Sound = this;
@@ -17,19 +18,19 @@ public class SoundManager : MonoBehaviour
     // Update is called once per frame
     public void JumpAudio()
     {
-        audioSource.clip = jumpAudio;
-        audioSource.Play();
+        SFXAudioSource.clip = jumpAudio;
+        SFXAudioSource.Play();
     }
 
     public void CherryAudio()
     {
-        audioSource.clip = cherryAudio;
-        audioSource.Play();
+        SFXAudioSource.clip = cherryAudio;
+        SFXAudioSource.Play();
     }
 
     public void GemAudio()
     {
-        audioSource.clip = gemAudio;
-        audioSource.Play();
+        SFXAudioSource.clip = gemAudio;
+        SFXAudioSource.Play();
     }
 }

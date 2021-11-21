@@ -15,6 +15,10 @@ public class MainMenu : MonoBehaviour
     {
         GameObject.Find("/MainMenu/Image/UI").SetActive(true);
     }
-
+    public void NewAndLoad()
+    {
+        GameObject.Find("/MainMenu/Image/SaveList").SetActive(true);
+        GameObject.Find("/MainMenu/Image/UI").SetActive(false);
+    }
 
 }
