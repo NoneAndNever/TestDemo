@@ -6,11 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController playerController;
     public PlayerController player;
     public Collider2D Vcol, Hcol;
     public LayerMask Ground,Enemies;
     public Text CherryNum, GemNum;
     public Transform CellingCheck,FeetCheck;
+    public SaveList SaveList;
 
     //public AudioSource jumpAudio,cherryAudio,gemAudio;
     [Header("Dash参数")]
@@ -19,6 +21,9 @@ public class PlayerController : MonoBehaviour
     private float lastDash=-10f;//上次冲刺时间
     private float dashCoolDown=3f;//冲刺CD
     private float dashSpeed=30;//冲刺速度
+
+    private bool ableToDash=false;
+    private bool ableToGlide=false;
 
     
 
@@ -30,16 +35,48 @@ public class PlayerController : MonoBehaviour
     private int jumpTimes = 2,jumpSkill=2;
 
 
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
     }
 
     private void Awake()
     {
         player = this;
+        //LoadGame(SaveList.savelist[1]);
+
+    }
+
+    void LoadGame(Save save)
+    {
+        jumpSkill = save.jumpSkill;
+        cherries= save.cherryNumber;
+        gems = save.gemNumber;
+        CherryNum.text = save.cherryNumber.ToString();
+        GemNum.text = save.gemNumber.ToString();
+        if(SceneManager.GetActiveScene().buildIndex==1)
+            transform.position = new Vector3(save.MainWorldX,save.MainWorldY,save.MainWorldZ);
+        ableToDash = save.dash;
+        ableToGlide = save.glide;
+    }
+
+
+    public void SaveGame(Save save)
+    {
+        save.jumpSkill = jumpSkill;
+        save.cherryNumber = cherries;
+        save.gemNumber = gems;
+        save.MainWorldX = transform.position.x;
+        save.MainWorldY = transform.position.y;
+        save.MainWorldZ = transform.position.z;
+        save.dash = ableToDash;
+        save.glide = ableToGlide;
     }
 
     // Update is called once per frame
@@ -58,7 +95,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
+    //滑翔
     void glide()
     {
         if (Input.GetButton("Glide") && rb.velocity.y < 0)
@@ -70,7 +107,8 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = 1f;
         }
     }
-
+    
+    //重置冲刺条件
     void ReadyToDash()
     {
         if (Input.GetKeyDown(KeyCode.C) && Time.time > lastDash + dashCoolDown)
@@ -81,6 +119,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    //冲刺
     void Dash()
     {
         if (isDashing )

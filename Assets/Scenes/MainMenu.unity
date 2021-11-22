@@ -565,6 +565,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af07d983ef3d7dc48b62398f888d8ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveList: {fileID: 11400000, guid: f602d81d928e0fb418f47cabf73ba3cc, type: 2}
+  save: {fileID: 11400000, guid: 3a844f3d1bd3eb24f8646e05f91b38f5, type: 2}
 --- !u!95 &739679383
 Animator:
   serializedVersion: 3
@@ -1260,7 +1262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6186b6ce7a1e3da4092678c3638141b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveData: {fileID: 11400000, guid: f602d81d928e0fb418f47cabf73ba3cc, type: 2}
+  saveList: {fileID: 11400000, guid: f602d81d928e0fb418f47cabf73ba3cc, type: 2}
 --- !u!224 &2084241478 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3652834566458576548, guid: e28742a6cad8cf44fb8873abb9b661a4, type: 3}
@@ -1437,7 +1439,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2942271490493117816, guid: e28742a6cad8cf44fb8873abb9b661a4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
+      value: SaveGame
       objectReference: {fileID: 0}
     - target: {fileID: 2942271490493117816, guid: e28742a6cad8cf44fb8873abb9b661a4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName

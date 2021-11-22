@@ -7,6 +7,8 @@ public class Pause : MonoBehaviour
 {
     public GameObject PauseMenu;
     public AudioMixer AudioMixer;
+    public PlayerController player;
+    public SaveList SaveList;
 
     public void PauseGame()
     {
@@ -35,5 +37,11 @@ public class Pause : MonoBehaviour
     public void SetSFXVolume(float value)
     {
         AudioMixer.SetFloat("SFX", value);
+    }
+    public void SaveAndQuit()
+    {
+        PlayerController.playerController.SaveGame(SaveList.savelist[1]);
+        GameSaveManager.gameSaveManager.SaveGame();
+        Application.Quit();
     }
 }

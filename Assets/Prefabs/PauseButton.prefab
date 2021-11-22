@@ -1725,6 +1725,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PauseMenu: {fileID: 4806178323157579205}
   AudioMixer: {fileID: 24100000, guid: f81fbf739248e3c4f93500a1371229f2, type: 2}
+  player: {fileID: 0}
+  SaveList: {fileID: 11400000, guid: f602d81d928e0fb418f47cabf73ba3cc, type: 2}
 --- !u!114 &8511563958499611731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1737,7 +1739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6186b6ce7a1e3da4092678c3638141b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveData: {fileID: 11400000, guid: f602d81d928e0fb418f47cabf73ba3cc, type: 2}
+  saveList: {fileID: 11400000, guid: f602d81d928e0fb418f47cabf73ba3cc, type: 2}
 --- !u!114 &843788565176537491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1750,6 +1752,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af07d983ef3d7dc48b62398f888d8ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveList: {fileID: 11400000, guid: f602d81d928e0fb418f47cabf73ba3cc, type: 2}
+  save: {fileID: 11400000, guid: 3a844f3d1bd3eb24f8646e05f91b38f5, type: 2}
 --- !u!1 &4806178323157579205
 GameObject:
   m_ObjectHideFlags: 0

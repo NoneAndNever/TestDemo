@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
+    public SaveList saveList;
+    public Save save;
     public void Play()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
@@ -11,6 +13,8 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
     }
+
+    
     public void UIEnabled()
     {
         GameObject.Find("/MainMenu/Image/UI").SetActive(true);
@@ -19,6 +23,7 @@ public class MainMenu : MonoBehaviour
     {
         GameObject.Find("/MainMenu/Image/SaveList").SetActive(true);
         GameObject.Find("/MainMenu/Image/UI").SetActive(false);
+        saveList.savelist.Add(save);
     }
 
 }
